@@ -1,68 +1,54 @@
+@import "tailwindcss";
+
+/* Design tokens */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  /* Primary */
+  --color-primary-400: #a86415;
+  --color-primary-300: #d18e1b;
+  --color-primary-200: #e9ac32;
+  --color-primary-100: #fabf42;
+  --color-primary-50: #fed172;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* Secondary */
+  --color-secondary-800: #17121d;
+  --color-secondary-100: #0c0614;
+  --color-secondary-75: rgba(12, 6, 20, 0.75);
+  --color-secondary-50: rgba(12, 6, 20, 0.5);
+  --color-secondary-25: rgba(12, 6, 20, 0.25);
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* White */
+  --color-white-100: #f4f1eb;
+  --color-white-75: rgba(253, 252, 252, 0.75);
+  --color-white-50: rgba(253, 252, 252, 0.5);
+  --color-white-25: rgba(253, 252, 252, 0.25);
+
+  /* Grey */
+  --color-grey-500: #252422;
+  --color-grey-400: #6b6862;
+  --color-grey-300: #8f8c84;
+  --color-grey-200: #bab8b3;
+  --color-grey-100: #e4e2dd;
+  /* Semantic */
+  --color-primary: #d18e1b;
+  --color-bg-main: #0c0614;
+  --color-bg-card: #17121d;
+  /* --background: var(--color-secondary-100);
+  --card-bg: var(--color-secondary-800);
+  --text-primary: var(--color-white-100);
+  --text-muted: var(--color-grey-300);
+  --accent: var(--color-primary-300);
+  --accent-hover: var(--color-primary-400);*/
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+/* Base reset */
+html,
+body,
+#root {
+  height: 100%;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+  background-color: var(--color-bg-main);
+  color: white;
+  font-family: Inter, system-ui, sans-serif;
 }
