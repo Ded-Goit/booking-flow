@@ -1,9 +1,5 @@
-import { useState } from "react";
 import type { BookingData } from "../../types/booking";
-import { getMonthData } from "../../utils/calendar";
-import CalendarDay from "../ui/CalendarDay";
-import Button from "../ui/Button";
-import Progress from "../ui/Progress";
+import Calendar from "../ui/Calendar";
 
 interface Props {
   data: BookingData;
@@ -12,53 +8,51 @@ interface Props {
 }
 
 export default function ChooseDay({ data, setData, onNext }: Props) {
-  const today = new Date();
-  const [month] = useState(today.getMonth());
-  const [year] = useState(today.getFullYear());
-
-  const days = getMonthData(year, month);
-
-  const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-
   return (
-    <div>
-      <Progress step={1} />
+    <div className="text-center">
+      {/* TOP BLOCK */}
+      <div className="mb-8">
+        <h1 className="text-xl font-semibold text-white mb-4">Consultation</h1>
 
-      <h2 className="text-xl font-semibold text-white mb-4">Select a day</h2>
+        <div className="flex items-center justify-center gap-2 text-sm text-white/60 mb-2">
+          <span>⏱</span>
+          <span>30 min</span>
+        </div>
 
-      <div className="flex justify-between items-center mb-4 text-sm text-gray-400">
-        <span>
-          {today.toLocaleString("default", { month: "long" })} {year}
-        </span>
-        <span className="text-xs">Central European Time (8:11pm) ▼</span>
+        <div className="flex items-center justify-center gap-2 text-sm text-white/60">
+          <span>📹</span>
+          <span>Web conferencing details provided upon confirmation.</span>
+        </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-2 mb-2 text-xs text-gray-500">
-        {weekdays.map((d) => (
-          <div key={d} className="text-center">
-            {d}
-          </div>
-        ))}
+      {/* TITLE */}
+      <h2 className="text-lg font-medium text-white mb-6">
+        Select a Date & Time
+      </h2>
+
+      {/* CALENDAR */}
+      <Calendar
+        value={data.date}
+        onChange={(date: Date) => {
+          setData((prev) => ({ ...prev, date }));
+          onNext(); // автоперехід
+        }}
+      />
+
+      {/* TIMEZONE */}
+      <div className="mt-8 text-left">
+        <p className="text-xs text-white/40 mb-1">Time zone</p>
+
+        <button className="flex items-center justify-between w-full border border-white/10 rounded-xl px-4 py-3 text-sm text-white/70 hover:border-white/30 transition">
+          Central European Time (8:11pm)
+          <span className="text-white/40">▼</span>
+        </button>
       </div>
 
-      <div className="grid grid-cols-7 gap-2 mb-6">
-        {days.map((date, i) =>
-          date ? (
-            <CalendarDay
-              key={i}
-              date={date}
-              selected={data.date?.toDateString() === date.toDateString()}
-              onSelect={() => setData((prev) => ({ ...prev, date }))}
-            />
-          ) : (
-            <div key={i} />
-          ),
-        )}
+      {/* COOKIE */}
+      <div className="mt-6 text-xs text-white/40 hover:text-white transition cursor-pointer">
+        Cookie settings
       </div>
-
-      <Button disabled={!data.date} onClick={onNext}>
-        Next
-      </Button>
     </div>
   );
 }
