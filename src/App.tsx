@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import type { Step, SelectedDate } from "./types/booking";
 
 import { Calendar } from "./components/calendar/Calendar";
@@ -6,6 +6,7 @@ import { TimeSelector } from "./components/booking/TimeSelector";
 import { Details } from "./components/booking/Details";
 import { Header } from "./components/booking/Header";
 import { Confirmation } from "./components/booking/Confirmation";
+import { notifyBooking } from "./utils/api";
 
 export default function App() {
   const [step, setStep] = useState<Step>("date");
@@ -20,9 +21,7 @@ export default function App() {
     notes: string;
   } | null>(null);
 
-  /* =========================
-     Handlers
-  ========================== */
+  /*      Handlers  */
 
   const handleDateSelect = useCallback((date: SelectedDate) => {
     setSelectedDate(date);
@@ -40,17 +39,41 @@ export default function App() {
   }, []);
 
   const handleConfirm = useCallback(
-    (data: { name: string; guests: string[]; notes: string }) => {
+    async (data: { name: string; guests: string[]; notes: string }) => {
       setFormData(data);
       setStep("confirmation");
+
+      await notifyBooking(data); //  notify backend (minimal integration)
     },
     [],
   );
 
-  /* ========================= */
+  /*      Global navigation (first page)  */
+
+  const goToFirstStep = useCallback(() => {
+    setStep("date");
+  }, []);
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" || e.key === "Enter") {
+        goToFirstStep();
+      }
+    };
+
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [goToFirstStep]);
 
   return (
-    <div className="min-h-screen bg-[var(--background)] text-[var(--text-primary)] flex items-center justify-center p-6">
+    <div
+      className="min-h-screen bg-[var(--background)] text-[var(--text-primary)] flex items-center justify-center p-6"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          goToFirstStep();
+        }
+      }}
+    >
       <div className="w-full max-w-[980px] bg-gradient-to-br from-[#140d1f] to-[#0c0614] rounded-2xl shadow-2xl overflow-hidden border border-[var(--color-white-25)]">
         {step !== "confirmation" && (
           <Header
