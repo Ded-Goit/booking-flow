@@ -74,7 +74,7 @@ export default function App() {
         }
       }}
     >
-      <div className="w-full max-w-[980px] bg-gradient-to-br from-[#140d1f] to-[#0c0614] rounded-2xl shadow-2xl overflow-hidden border border-[var(--color-white-25)]">
+      <div className="w-full max-w-[700px] bg-gradient-to-br from-[#140d1f] to-[#0c0614] rounded-2xl shadow-2xl overflow-hidden border border-[var(--color-white-25)]">
         {step !== "confirmation" && (
           <Header
             step={step}

@@ -23,7 +23,7 @@ export const Calendar = ({
   } = useCalendar({ selectedDate });
 
   return (
-    <div className="w-[344px] mx-auto text-left">
+    <div className="max-w-[344px] mx-auto text-left">
       <h3 className="text-xl font-semibold mt-8 mb-8 ">Select a Date & Time</h3>
 
       <MonthNavigation
