@@ -39,10 +39,20 @@ export const useCalendar = ({ selectedDate }: Props) => {
     return result;
   }, [year, month]);
 
-  const isPast = (day: number) => isDatePast(year, month, day, today);
+  const isPast = (day: number) => {
+    const date = new Date(year, month, day);
+    const dayOfWeek = date.getDay(); // 0 - sun, 6 - sat
+    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+
+    return isWeekend || isDatePast(year, month, day, today);
+  };
 
   const isSelected = (day: number): boolean => {
     if (!selectedDate) return false;
+
+    const date = new Date(year, month, day); // 0 - sun, 6 - sat
+    const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+    if (isWeekend) return false;
 
     return (
       selectedDate.day === day &&
@@ -52,9 +62,7 @@ export const useCalendar = ({ selectedDate }: Props) => {
   };
 
   const nextMonth = () => setCurrentMonth(new Date(year, month + 1, 1));
-
   const prevMonth = () => setCurrentMonth(new Date(year, month - 1, 1));
-
   const monthName = getMonthName(year, month);
 
   return {

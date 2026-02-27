@@ -48,7 +48,7 @@ export const Calendar = ({
         onChange={onTimezoneChange}
       />
 
-      <div className="mt-6 text-[var(--accent)] text-sm text-center">
+      <div className="mt-6 mb-[28px] text-[var(--accent)] text-sm text-center cursor-pointer hover:underline">
         Cookie settings
       </div>
     </div>
