@@ -119,7 +119,7 @@ export const Details = ({ selectedDate, selectedTime, onConfirm }: Props) => {
             id="notes"
             name="notes"
             autoComplete="off"
-            maxLength={MAX_NOTES_LENGTH} // ✅ обмеження
+            maxLength={MAX_NOTES_LENGTH}
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             rows={4}

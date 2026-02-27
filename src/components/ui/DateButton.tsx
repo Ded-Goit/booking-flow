@@ -27,14 +27,13 @@ export const DateButton: FC<Props> = ({
   if (isDisabled) {
     stateClasses = "text-[var(--color-white-25)] cursor-not-allowed opacity-50";
   } else if (isSelected) {
-    // Використовуємо змінні для обраного стану
     stateClasses = `
       bg-[var(--date-bg-selected)] 
       text-[var(--date-text-selected)] 
       font-semibold scale-105
     `;
   } else {
-    // Стан "Active" за замовчуванням + "Selected" на Hover
+    // Default "Active" state + "Selected" on Hover
     stateClasses = `
       bg-[var(--date-bg-active)] 
       text-[var(--date-text-active)] 

@@ -26,8 +26,6 @@ export const DaysGrid = ({
   return (
     <div className="w-full">
       {" "}
-      {/* Одине обмеження ширини для всього календаря */}
-      {/* Заголовки днів тижня */}
       <div className="grid grid-cols-7 mb-3">
         {["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"].map((d) => (
           <div
@@ -38,7 +36,6 @@ export const DaysGrid = ({
           </div>
         ))}
       </div>
-      {/* Сітка чисел календаря */}
       <div className="grid grid-cols-7 gap-y-1 justify-items-center">
         {days.map((day, i) => {
           if (!day)

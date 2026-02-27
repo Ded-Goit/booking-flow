@@ -1,6 +1,7 @@
 export const isValidEmail = (email: string): boolean => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 };
+
 /*  Booking form validation */
 
 export const MAX_NOTES_LENGTH = 500;

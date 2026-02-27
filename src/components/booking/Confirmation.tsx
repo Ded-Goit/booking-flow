@@ -29,9 +29,9 @@ export const Confirmation = ({
     <div className="w-full p-10 flex flex-col items-center space-y-8 relative">
       <div className="flex flex-col items-center space-y-2">
         <div className="flex items-center gap-[10px]">
-          {/* Кнопка-іконка */}
+          {/* Button icon */}
           <button
-            // onClick={onClose}  можна Додати функцію закриття в props компонента
+            // onClick={onClose}  You can add a closure function to the component's props.
             className="
             transition-transform hover:scale-110 active:scale-95 
             text-[#e9ac32] /* Передаємо колір у currentColor іконки */
@@ -52,31 +52,40 @@ export const Confirmation = ({
         </p>
       </div>
 
-      <div className="w-[458px] h-[162px] p-[16px_24px] border border-[var(--color-white-25)] rounded-[8px] flex flex-col justify-between">
+      <div
+        className="    
+    w-full max-w-[458px] min-h-[162px] 
+    p-[16px_24px] 
+    border border-[var(--color-white-25)] 
+    rounded-[8px] 
+    flex flex-col justify-between 
+    box-border
+  "
+      >
         <h3 className="font-sans font-semibold text-[20px] leading-[1.2] text-[#f4f1eb]">
           Schedule eClosing
         </h3>
 
         <div className="flex flex-col space-y-2">
-          {/* Ім'я */}
-          <div className="flex items-center gap-2">
-            <UserIcon className="w-5 h-5 text-[rgba(253,252,252,0.5)]" />
+          {/* Name */}
+          <div className="flex items-start gap-2">
+            <UserIcon className="w-5 h-5 shrink-0 text-[rgba(253,252,252,0.5)]" />
             <span className="font-sans font-semibold text-[16px] leading-[1.5] text-[rgba(253,252,252,0.5)]">
               {name}
             </span>
           </div>
 
-          {/* Дата та Час */}
-          <div className="flex items-center gap-2">
-            <CalendarIcon className="w-5 h-5 text-[rgba(253,252,252,0.5)]" />
+          {/* Date and Time */}
+          <div className="flex items-start gap-2">
+            <CalendarIcon className="w-5 h-5 shrink-0 text-[rgba(253,252,252,0.5)]" />
             <span className="font-sans font-semibold text-[16px] leading-[1.5] text-[rgba(253,252,252,0.5)]">
               {range}
             </span>
           </div>
 
-          {/* Таймзона */}
-          <div className="flex items-center gap-2">
-            <GlobeIcon className="w-5 h-5 text-[rgba(253,252,252,0.5)]" />
+          {/* time zone */}
+          <div className="flex items-start gap-2">
+            <GlobeIcon className="w-5 h-5 shrink-0 text-[rgba(253,252,252,0.5)]" />
             <span className="font-sans font-semibold text-[16px] leading-[1.5] text-[rgba(253,252,252,0.5)]">
               {timezone}
             </span>
@@ -84,7 +93,7 @@ export const Confirmation = ({
         </div>
       </div>
 
-      {/* Додаткові поля (за межами картки) */}
+      {/* Additional fields (outside the card) */}
       <div className="space-y-1 text-sm text-[rgba(253,252,252,0.5)] text-center">
         {guests.length > 0 && <div>Guests: {guests.join(", ")}</div>}
         {notes && <div>Notes: {notes}</div>}

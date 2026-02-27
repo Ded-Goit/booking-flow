@@ -1,25 +1,3 @@
-/*import clsx from "clsx";
-
-type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "primary" | "secondary";
-};
-
-export const Button = ({ variant = "primary", className, ...props }: Props) => {
-  return (
-    <button
-      className={clsx(
-        "px-6 py-3 rounded-lg font-semibold transition",
-        variant === "primary" &&
-          "bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-black",
-        variant === "secondary" &&
-          "border border-[var(--accent)] text-[var(--accent)]",
-        "disabled:opacity-50 disabled:cursor-not-allowed",
-        className,
-      )}
-      {...props}
-    />
-  );
-};*/
 import type { ButtonHTMLAttributes } from "react";
 
 type Variant = "primary" | "secondary";

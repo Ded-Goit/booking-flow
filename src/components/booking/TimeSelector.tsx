@@ -20,7 +20,6 @@ export const TimeSelector = ({
 }: Props) => {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
-  // Стилі для повного приховування смуги прокрутки в усіх браузерах
   const hideScrollbarStyle = {
     msOverflowStyle: "none", // IE/Edge
     scrollbarWidth: "none", // Firefox
@@ -28,9 +27,7 @@ export const TimeSelector = ({
   } as const;
 
   return (
-    /* 1. ПРИБРАНО min-h-screen. Замінено на h-auto (висота за контентом) */
     <div className="w-full h-auto flex justify-center bg-[var(--color-bg)]">
-      {/* 2. КОНТЕЙНЕР ВІДЖЕТА: Додано h-fit, щоб він не ріс вниз */}
       <div
         className="
       w-full max-w-[1000px] 
@@ -41,8 +38,7 @@ export const TimeSelector = ({
       box-border
     "
       >
-        {/* ЛІВА ЧАСТИНА: Календар */}
-        {/* h-fit гарантує, що колонка закінчиться там, де закінчиться календар */}
+        {/* LEFT PART: Calendar */}
         <div className="p-6 md:p-0 md:pr-[28px] md:border-r border-[var(--color-white-25)] flex flex-col h-fit">
           <div className="w-full max-w-[344px] mx-auto md:mx-0 text-left">
             <Calendar
@@ -53,8 +49,8 @@ export const TimeSelector = ({
           </div>
         </div>
 
-        {/* ПРАВА ЧАСТИНА: Вибір часу */}
-        {/* Видалено h-full, додано self-start, щоб блок не розтягувався по висоті лівої частини */}
+        {/* RIGHT PART: Timing */}
+
         <div className="p-6 md:p-0 md:pl-[20px] flex flex-col h-fit self-start relative overflow-hidden">
           <div
             className="
@@ -77,7 +73,7 @@ export const TimeSelector = ({
             ))}
           </div>
 
-          {/* Кнопка Next */}
+          {/* Next button */}
           <div className="relative z-10 -mt-12 pt-12 bg-gradient-to-t from-[#0c0614] via-[#0c0614] to-transparent">
             <Button
               variant="primary"

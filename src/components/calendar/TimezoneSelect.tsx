@@ -16,13 +16,11 @@ export const TimezoneSelect = ({
 
   return (
     <div className="mt-8 text-left relative w-full font-sans">
-      {/* Заголовок: Inter, 600, 16px, 1.5, #f4f1eb */}
       <p className="font-semibold text-[16px] leading-[1.5] text-[var(--color-white-100)] mb-2">
         Time zone
       </p>
-      {/* Контейнер для іконки та інпута */}
+
       <div className="flex items-center gap-3">
-        {/* Іконка (тепер вона в одній лінії з кнопкою) */}
         <GlobeIcon
           className="text-[var(--color-white-50)] shrink-0"
           size={20}
@@ -52,7 +50,6 @@ export const TimezoneSelect = ({
         </button>
       </div>
 
-      {/* Випадаючий список (додано ml-8 або зміщення, щоб він був рівно під інпутом) */}
       {open && (
         <div
           className="
