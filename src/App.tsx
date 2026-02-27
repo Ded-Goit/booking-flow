@@ -1,81 +1,73 @@
-import { useState, useCallback, useEffect } from "react";
-import CenteredLayout from "./layout/CenteredLayout";
-import Card from "./components/ui/Card";
+import { useState, useCallback } from "react";
+import type { Step, SelectedDate } from "./types/booking";
 
-import ChooseDay from "./components/booking/ChooseDay";
-import ChooseHour from "./components/booking/ChooseHour";
-import Details from "./components/booking/Details";
-import Done from "./components/booking/Done";
+import { Calendar } from "./components/calendar/Calendar";
+import { TimeSelector } from "./components/booking/TimeSelector";
+import { Details } from "./components/booking/Details";
+import { Header } from "./components/booking/Header";
 
-import type { BookingData } from "./types/booking";
+export default function App() {
+  const [step, setStep] = useState<Step>("date");
+  const [selectedDate, setSelectedDate] = useState<SelectedDate | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [selectedTimezone, setSelectedTimezone] =
+    useState<string>("Europe/Berlin");
 
-type Step = "day" | "hour" | "details" | "done";
+  /* =========================
+     Handlers (стабільні)
+  ========================== */
 
-const initialState: BookingData = {
-  date: null,
-  time: null,
-  name: "",
-  email: "",
-};
-
-function App() {
-  const [step, setStep] = useState<Step>("day");
-  const [data, setData] = useState<BookingData>(initialState);
-
-  // Переходи між кроками
-  const next = () => {
-    if (step === "day") setStep("hour");
-    else if (step === "hour") setStep("details");
-    else if (step === "details") setStep("done");
-  };
-
-  const back = () => {
-    if (step === "hour") setStep("day");
-    else if (step === "details") setStep("hour");
-  };
-
-  // Скидання форми
-  const reset = useCallback(() => {
-    setData(initialState);
-    setStep("day");
+  const handleDateSelect = useCallback((date: SelectedDate) => {
+    setSelectedDate(date);
+    setSelectedTime(null); // reset якщо змінюємо дату
+    setStep("time");
   }, []);
 
-  // Обробка Escape для reset
-  useEffect(() => {
-    if (step !== "done") return;
+  const handleTimeSelect = useCallback((time: string) => {
+    setSelectedTime(time);
+    setStep("details");
+  }, []);
 
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") reset();
-    };
+  const handleTimezoneChange = useCallback((tz: string) => {
+    setSelectedTimezone(tz);
+  }, []);
 
-    window.addEventListener("keydown", handleEscape);
-    return () => window.removeEventListener("keydown", handleEscape);
-  }, [step, reset]);
+  /* ========================= */
 
   return (
-    <CenteredLayout onOutsideClick={step === "done" ? reset : undefined}>
-      <Card>
-        {step === "day" && (
-          <ChooseDay data={data} setData={setData} onNext={next} />
-        )}
+    <div className="min-h-screen bg-[var(--background)] text-[var(--text-primary)] flex items-center justify-center p-6">
+      <div className="w-full max-w-[980px] bg-gradient-to-br from-[#140d1f] to-[#0c0614] rounded-2xl shadow-2xl overflow-hidden border border-[var(--color-white-25)]">
+        <div>
+          <Header
+            step={step}
+            selectedDate={selectedDate}
+            selectedTime={selectedTime}
+            timezone={selectedTimezone}
+          />
+        </div>
 
-        {step === "hour" && (
-          <ChooseHour
-            data={data}
-            setData={setData}
-            onNext={next}
-            onBack={back}
+        {step === "date" && (
+          <Calendar
+            selectedDate={selectedDate}
+            selectedTimezone={selectedTimezone}
+            onSelect={handleDateSelect}
+            onTimezoneChange={handleTimezoneChange}
           />
         )}
 
-        {step === "details" && (
-          <Details data={data} setData={setData} onNext={next} onBack={back} />
+        {step === "time" && selectedDate && (
+          <TimeSelector
+            selectedDate={selectedDate}
+            selectedTimezone={selectedTimezone}
+            onSelectTime={handleTimeSelect}
+            onTimezoneChange={handleTimezoneChange}
+          />
         )}
 
-        {step === "done" && <Done data={data} onRestart={reset} />}
-      </Card>
-    </CenteredLayout>
+        {step === "details" && selectedDate && selectedTime && (
+          <Details selectedDate={selectedDate} selectedTime={selectedTime} />
+        )}
+      </div>
+    </div>
   );
 }
-
-export default App;
