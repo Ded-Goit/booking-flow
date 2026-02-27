@@ -28,52 +28,67 @@ export const TimeSelector = ({
   } as const;
 
   return (
-    <div className="md:grid md:grid-cols-[1fr_344px] w-full">
-      {/* ЛІВА ЧАСТИНА: Календар */}
-      <div className="p-6 md:p-10 md:border-r border-[var(--color-white-25)] flex justify-center">
-        <Calendar
-          selectedDate={selectedDate}
-          selectedTimezone={selectedTimezone}
-          onTimezoneChange={onTimezoneChange}
-        />
-      </div>
-
-      {/* ПРАВА ЧАСТИНА: Вибір часу */}
-      <div className="p-6 md:p-10 flex flex-col h-full relative overflow-hidden">
-        {/* Контейнер кнопок часу */}
-        <div
-          className="
-            flex flex-col gap-3 
-            h-[430px] /* Висота підібрана під ~9 кнопок */
-            overflow-y-auto 
-            [&::-webkit-scrollbar]:hidden /* Приховує скрол у Chrome/Safari */
-          "
-          style={hideScrollbarStyle}
-        >
-          {TIME_SLOTS.map((time) => (
-            <TimeButton
-              key={time}
-              selected={selectedTime === time}
-              onClick={() => setSelectedTime(time)}
-              className="w-full shrink-0"
-            >
-              {time}
-            </TimeButton>
-          ))}
+    /* 1. ПРИБРАНО min-h-screen. Замінено на h-auto (висота за контентом) */
+    <div className="w-full h-auto flex justify-center bg-[var(--color-bg)]">
+      {/* 2. КОНТЕЙНЕР ВІДЖЕТА: Додано h-fit, щоб він не ріс вниз */}
+      <div
+        className="
+      w-full max-w-[1000px] 
+      h-fit 
+      md:p-[28px] 
+      md:grid md:grid-cols-[1fr_244px] 
+      md:gap-2 
+      box-border
+    "
+      >
+        {/* ЛІВА ЧАСТИНА: Календар */}
+        {/* h-fit гарантує, що колонка закінчиться там, де закінчиться календар */}
+        <div className="p-6 md:p-0 md:pr-[28px] md:border-r border-[var(--color-white-25)] flex flex-col h-fit">
+          <div className="w-full max-w-[344px] mx-auto md:mx-0 text-left">
+            <Calendar
+              selectedDate={selectedDate}
+              selectedTimezone={selectedTimezone}
+              onTimezoneChange={onTimezoneChange}
+            />
+          </div>
         </div>
 
-        {/* Контейнер кнопки Next з градієнтом-перекриттям */}
-        {/* -mt-12 та pt-12 створюють зону перекриття нижньої кнопки */}
-        <div className="relative z-10 -mt-12 pt-12 bg-gradient-to-t from-[#0c0614] via-[#0c0614] to-transparent">
-          <Button
-            variant="primary"
-            size="lg"
-            disabled={!selectedTime}
-            onClick={() => selectedTime && onSelectTime(selectedTime)}
-            className="w-full shadow-lg"
+        {/* ПРАВА ЧАСТИНА: Вибір часу */}
+        {/* Видалено h-full, додано self-start, щоб блок не розтягувався по висоті лівої частини */}
+        <div className="p-6 md:p-0 md:pl-[20px] flex flex-col h-fit self-start relative overflow-hidden">
+          <div
+            className="
+            flex flex-col gap-3 
+            h-[430px] /* Фіксована висота зони скролу */
+            overflow-y-auto 
+            [&::-webkit-scrollbar]:hidden
+          "
+            style={hideScrollbarStyle}
           >
-            Next
-          </Button>
+            {TIME_SLOTS.map((time) => (
+              <TimeButton
+                key={time}
+                selected={selectedTime === time}
+                onClick={() => setSelectedTime(time)}
+                className="w-full shrink-0"
+              >
+                {time}
+              </TimeButton>
+            ))}
+          </div>
+
+          {/* Кнопка Next */}
+          <div className="relative z-10 -mt-12 pt-12 bg-gradient-to-t from-[#0c0614] via-[#0c0614] to-transparent">
+            <Button
+              variant="primary"
+              size="lg"
+              disabled={!selectedTime}
+              onClick={() => selectedTime && onSelectTime(selectedTime)}
+              className="w-full shadow-lg"
+            >
+              Next
+            </Button>
+          </div>
         </div>
       </div>
     </div>
