@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from "react";
 import type { SelectedDate } from "../../types/booking";
-import { isValidEmail } from "../../utils/validation";
+import { validateBookingForm, MAX_NOTES_LENGTH } from "../../utils/validation";
 import { AddGuests } from "./AddGuests";
 
 type Props = {
@@ -19,10 +19,6 @@ export const Details = ({ selectedDate, selectedTime, onConfirm }: Props) => {
   const [email, setEmail] = useState("");
   const [guests, setGuests] = useState<string[]>([]);
   const [notes, setNotes] = useState("");
-
-  /* ========================
-     Derived data (memoized)
-  ========================= */
 
   const meetingTime = useMemo(() => {
     const dateObj = new Date(
@@ -44,15 +40,12 @@ export const Details = ({ selectedDate, selectedTime, onConfirm }: Props) => {
   }, [selectedDate, selectedTime]);
 
   const isFormValid = useMemo(() => {
-    return name.trim().length > 1 && isValidEmail(email);
-  }, [name, email]);
-
-  /* ======================== */
+    return validateBookingForm({ name, email, notes });
+  }, [name, email, notes]);
 
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault(); // ✅ щоб форма не перезавантажувала сторінку
-
+      e.preventDefault();
       if (!isFormValid) return;
 
       const payload = {
@@ -85,7 +78,6 @@ export const Details = ({ selectedDate, selectedTime, onConfirm }: Props) => {
       <h3 className="text-xl font-semibold mb-6">Enter details</h3>
 
       <div className="space-y-5">
-        {/* NAME */}
         <div>
           <label htmlFor="name" className="block text-sm mb-2">
             Name *
@@ -95,15 +87,13 @@ export const Details = ({ selectedDate, selectedTime, onConfirm }: Props) => {
             name="name"
             type="text"
             autoComplete="name"
-            required
-            minLength={2}
+            maxLength={100}
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full bg-transparent border border-[var(--color-white-25)] rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--color-primary-100)] transition"
           />
         </div>
 
-        {/* EMAIL */}
         <div>
           <label htmlFor="email" className="block text-sm mb-2">
             Email *
@@ -113,7 +103,6 @@ export const Details = ({ selectedDate, selectedTime, onConfirm }: Props) => {
             name="email"
             type="email"
             autoComplete="email"
-            required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full bg-transparent border border-[var(--color-white-25)] rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--color-primary-100)] transition"
@@ -122,7 +111,6 @@ export const Details = ({ selectedDate, selectedTime, onConfirm }: Props) => {
 
         <AddGuests value={guests} onChange={setGuests} />
 
-        {/* NOTES */}
         <div>
           <label htmlFor="notes" className="block text-sm mb-2">
             Please share anything that will help prepare our meeting
@@ -131,11 +119,15 @@ export const Details = ({ selectedDate, selectedTime, onConfirm }: Props) => {
             id="notes"
             name="notes"
             autoComplete="off"
+            maxLength={MAX_NOTES_LENGTH} // ✅ обмеження
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             rows={4}
             className="w-full bg-transparent border border-[var(--color-white-25)] rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--color-primary-100)] transition resize-none"
           />
+          <div className="text-xs text-right text-[var(--color-white-50)] mt-1">
+            {notes.length}/{MAX_NOTES_LENGTH}
+          </div>
         </div>
 
         <button
