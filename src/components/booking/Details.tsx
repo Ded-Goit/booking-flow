@@ -6,9 +6,15 @@ import { AddGuests } from "./AddGuests";
 type Props = {
   selectedDate: SelectedDate;
   selectedTime: string;
+  onConfirm: (data: {
+    name: string;
+    email: string;
+    guests: string[];
+    notes: string;
+  }) => void;
 };
 
-export const Details = ({ selectedDate, selectedTime }: Props) => {
+export const Details = ({ selectedDate, selectedTime, onConfirm }: Props) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [guests, setGuests] = useState<string[]>([]);
@@ -43,41 +49,71 @@ export const Details = ({ selectedDate, selectedTime }: Props) => {
 
   /* ======================== */
 
-  const handleSubmit = useCallback(() => {
-    if (!isFormValid) return;
+  const handleSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault(); // ✅ щоб форма не перезавантажувала сторінку
 
-    const payload = {
-      name: name.trim(),
-      email,
-      guests,
-      notes,
-      start: meetingTime.start,
-      end: meetingTime.end,
-    };
+      if (!isFormValid) return;
 
-    console.log("Booking payload:", payload);
+      const payload = {
+        name: name.trim(),
+        email,
+        guests,
+        notes,
+        start: meetingTime.start,
+        end: meetingTime.end,
+      };
 
-    // !!!!!!!!!!! тут буде API виклик!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  }, [isFormValid, name, email, guests, notes, meetingTime]);
+      console.log("Booking payload:", payload);
+
+      onConfirm({
+        name: name.trim(),
+        email,
+        guests,
+        notes,
+      });
+    },
+    [isFormValid, name, email, guests, notes, meetingTime, onConfirm],
+  );
 
   return (
-    <div className="p-6 md:p-10 max-w-[640px]">
+    <form
+      onSubmit={handleSubmit}
+      noValidate
+      className="mx-auto p-6 md:p-10 max-w-[350px]"
+    >
       <h3 className="text-xl font-semibold mb-6">Enter details</h3>
 
       <div className="space-y-5">
+        {/* NAME */}
         <div>
-          <label className="block text-sm mb-2">Name *</label>
+          <label htmlFor="name" className="block text-sm mb-2">
+            Name *
+          </label>
           <input
+            id="name"
+            name="name"
+            type="text"
+            autoComplete="name"
+            required
+            minLength={2}
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full bg-transparent border border-[var(--color-white-25)] rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--color-primary-100)] transition"
           />
         </div>
 
+        {/* EMAIL */}
         <div>
-          <label className="block text-sm mb-2">Email *</label>
+          <label htmlFor="email" className="block text-sm mb-2">
+            Email *
+          </label>
           <input
+            id="email"
+            name="email"
             type="email"
+            autoComplete="email"
+            required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full bg-transparent border border-[var(--color-white-25)] rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--color-primary-100)] transition"
@@ -86,11 +122,15 @@ export const Details = ({ selectedDate, selectedTime }: Props) => {
 
         <AddGuests value={guests} onChange={setGuests} />
 
+        {/* NOTES */}
         <div>
-          <label className="block text-sm mb-2">
+          <label htmlFor="notes" className="block text-sm mb-2">
             Please share anything that will help prepare our meeting
           </label>
           <textarea
+            id="notes"
+            name="notes"
+            autoComplete="off"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             rows={4}
@@ -99,9 +139,8 @@ export const Details = ({ selectedDate, selectedTime }: Props) => {
         </div>
 
         <button
-          type="button"
+          type="submit"
           disabled={!isFormValid}
-          onClick={handleSubmit}
           className={`
             mt-4 w-full py-4 rounded-full transition
             ${
@@ -115,9 +154,9 @@ export const Details = ({ selectedDate, selectedTime }: Props) => {
         </button>
       </div>
 
-      <div className="mt-6 text-sm text-[var(--color-primary-100)]">
+      <div className="mt-6 text-sm text-[var(--color-primary-100)] mx-auto w-fit">
         Cookie settings
       </div>
-    </div>
+    </form>
   );
 };

@@ -5,6 +5,7 @@ import { Calendar } from "./components/calendar/Calendar";
 import { TimeSelector } from "./components/booking/TimeSelector";
 import { Details } from "./components/booking/Details";
 import { Header } from "./components/booking/Header";
+import { Confirmation } from "./components/booking/Confirmation";
 
 export default function App() {
   const [step, setStep] = useState<Step>("date");
@@ -13,13 +14,19 @@ export default function App() {
   const [selectedTimezone, setSelectedTimezone] =
     useState<string>("Europe/Berlin");
 
+  const [formData, setFormData] = useState<{
+    name: string;
+    guests: string[];
+    notes: string;
+  } | null>(null);
+
   /* =========================
-     Handlers (стабільні)
+     Handlers
   ========================== */
 
   const handleDateSelect = useCallback((date: SelectedDate) => {
     setSelectedDate(date);
-    setSelectedTime(null); // reset якщо змінюємо дату
+    setSelectedTime(null);
     setStep("time");
   }, []);
 
@@ -32,19 +39,27 @@ export default function App() {
     setSelectedTimezone(tz);
   }, []);
 
+  const handleConfirm = useCallback(
+    (data: { name: string; guests: string[]; notes: string }) => {
+      setFormData(data);
+      setStep("confirmation");
+    },
+    [],
+  );
+
   /* ========================= */
 
   return (
     <div className="min-h-screen bg-[var(--background)] text-[var(--text-primary)] flex items-center justify-center p-6">
       <div className="w-full max-w-[980px] bg-gradient-to-br from-[#140d1f] to-[#0c0614] rounded-2xl shadow-2xl overflow-hidden border border-[var(--color-white-25)]">
-        <div>
+        {step !== "confirmation" && (
           <Header
             step={step}
             selectedDate={selectedDate}
             selectedTime={selectedTime}
             timezone={selectedTimezone}
           />
-        </div>
+        )}
 
         {step === "date" && (
           <Calendar
@@ -65,8 +80,26 @@ export default function App() {
         )}
 
         {step === "details" && selectedDate && selectedTime && (
-          <Details selectedDate={selectedDate} selectedTime={selectedTime} />
+          <Details
+            selectedDate={selectedDate}
+            selectedTime={selectedTime}
+            onConfirm={handleConfirm}
+          />
         )}
+
+        {step === "confirmation" &&
+          selectedDate &&
+          selectedTime &&
+          formData && (
+            <Confirmation
+              selectedDate={selectedDate}
+              selectedTime={selectedTime}
+              timezone={selectedTimezone}
+              name={formData.name}
+              guests={formData.guests}
+              notes={formData.notes}
+            />
+          )}
       </div>
     </div>
   );

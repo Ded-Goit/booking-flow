@@ -1,4 +1,4 @@
-export type Step = "date" | "time" | "details";
+export type Step = "date" | "time" | "details" | "confirmation";
 
 export type SelectedDate = {
   day: number;
