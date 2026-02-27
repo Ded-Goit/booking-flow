@@ -1,6 +1,7 @@
-export interface BookingData {
-  date: Date | null;
-  time: string | null;
-  name: string;
-  email: string;
-}
+export type Step = "date" | "time" | "details";
+
+export type SelectedDate = {
+  day: number;
+  month: number;
+  year: number;
+};

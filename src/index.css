@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Design tokens */
+/* ===== Design Tokens ===== */
 :root {
   /* Primary */
   --color-primary-400: #a86415;
@@ -28,27 +28,96 @@
   --color-grey-300: #8f8c84;
   --color-grey-200: #bab8b3;
   --color-grey-100: #e4e2dd;
+
   /* Semantic */
-  --color-primary: #d18e1b;
-  --color-bg-main: #0c0614;
-  --color-bg-card: #17121d;
-  /* --background: var(--color-secondary-100);
+  --background: var(--color-secondary-100);
   --card-bg: var(--color-secondary-800);
   --text-primary: var(--color-white-100);
   --text-muted: var(--color-grey-300);
   --accent: var(--color-primary-300);
-  --accent-hover: var(--color-primary-400);*/
-}
+  --accent-hover: var(--color-primary-400);
 
-/* Base reset */
-html,
-body,
-#root {
-  height: 100%;
+  /* Button sizes */
+  --btn-lg-height: 60px;
+  --btn-lg-padding-x: 48px;
+  --btn-lg-font-size: 18px;
+  --btn-lg-line-height: 1.55556;
+
+  --btn-sm-height: 42px;
+  --btn-sm-padding-x: 18px;
+  --btn-sm-font-size: 14px;
+  --btn-sm-line-height: 1.28571;
+
+  --btn-radius: 100px;
+
+  /* Primary */
+  --btn-primary-bg: var(--color-primary-200);
+  --btn-primary-hover: var(--color-primary-300);
+  --btn-primary-pressed: var(--color-primary-400);
+  --btn-primary-disabled: var(--color-grey-300);
+
+  /* Secondary */
+  --btn-secondary-bg: var(--color-secondary-50);
+  --btn-secondary-border: var(--color-primary-200);
+  --btn-secondary-hover: var(--color-primary-300);
+  --btn-secondary-pressed: var(--color-primary-400);
+  --btn-secondary-disabled: var(--color-grey-300);
+
+  /* Time Button */
+  --time-btn-height: 40px;
+  --time-btn-padding-x: 24px;
+  --time-btn-radius: 8px;
+
+  --time-btn-font-size: 16px;
+  --time-btn-line-height: 1.5;
+  --time-btn-font-weight: 600;
+
+  --time-btn-border-rest: var(--color-primary-100); /* #fabf42 */
+  --time-btn-border-hover: var(--color-primary-300); /* #d18e1b */
+  --time-btn-border-pressed: rgba(177, 96, 9, 0.2);
+
+  --time-btn-text-rest: var(--color-primary-300);
+  --time-btn-text-pressed: var(--color-primary-400);
+
+  --time-btn-bg-pressed: var(--color-secondary-100);
+  --time-btn-bg-selected: var(--color-primary-100);
+
+  /* Date Button */
+  --date-size: 44px;
+  --date-radius: 100px;
+
+  --date-font-size: 16px;
+  --date-line-height: 1.5;
+
+  --date-text-default: var(--color-white-75);
+  --date-text-selected: var(--color-primary-400);
+  --date-text-active: var(--color-primary-50);
+
+  --date-bg-active: rgba(177, 96, 9, 0.2);
+  --date-bg-selected: var(--color-primary-50);
+
+  --date-dot-size: 3px;
+  --date-dot-radius: 2px;
+  --date-dot-color: var(--color-white-75);
+
+  /* Input */
+  --input-height: 40px;
+  --input-radius: 10px;
+  --input-padding-x: 12px;
+
+  --input-bg: var(--color-secondary-25);
+  --input-border: var(--color-white-25);
+  --input-border-hover: var(--color-white-50);
+  --input-border-focus: var(--color-primary-200);
+  --input-border-error: #ef4444;
+
+  --input-text: var(--color-white-100);
+  --input-placeholder: var(--color-white-50);
+
+  --input-disabled-bg: var(--color-secondary-50);
+  --input-disabled-text: var(--color-grey-300);
 }
 
 body {
-  background-color: var(--color-bg-main);
-  color: white;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: "Inter", "Segoe UI", sans-serif;
 }

@@ -1,54 +1,123 @@
-import { useState } from "react";
-import type { BookingData } from "../../types/booking";
-import Button from "../ui/Button";
-import Progress from "../ui/Progress";
-import Input from "../ui/Input";
+import { useState, useMemo, useCallback } from "react";
+import type { SelectedDate } from "../../types/booking";
+import { isValidEmail } from "../../utils/validation";
+import { AddGuests } from "./AddGuests";
 
-interface Props {
-  data: BookingData;
-  setData: React.Dispatch<React.SetStateAction<BookingData>>;
-  onNext: () => void;
-  onBack: () => void;
-}
+type Props = {
+  selectedDate: SelectedDate;
+  selectedTime: string;
+};
 
-export default function Details({ data, setData, onNext, onBack }: Props) {
-  const [error, setError] = useState("");
+export const Details = ({ selectedDate, selectedTime }: Props) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [guests, setGuests] = useState<string[]>([]);
+  const [notes, setNotes] = useState("");
 
-  const submit = () => {
-    if (!data.name || !data.email) {
-      setError("All fields required");
-      return;
-    }
-    onNext();
-  };
+  /* ========================
+     Derived data (memoized)
+  ========================= */
+
+  const meetingTime = useMemo(() => {
+    const dateObj = new Date(
+      selectedDate.year,
+      selectedDate.month,
+      selectedDate.day,
+    );
+
+    const [h, m] = selectedTime.split(":").map(Number);
+
+    const start = new Date(dateObj);
+    start.setHours(h);
+    start.setMinutes(m);
+
+    const end = new Date(start);
+    end.setMinutes(end.getMinutes() + 30);
+
+    return { start, end };
+  }, [selectedDate, selectedTime]);
+
+  const isFormValid = useMemo(() => {
+    return name.trim().length > 1 && isValidEmail(email);
+  }, [name, email]);
+
+  /* ======================== */
+
+  const handleSubmit = useCallback(() => {
+    if (!isFormValid) return;
+
+    const payload = {
+      name: name.trim(),
+      email,
+      guests,
+      notes,
+      start: meetingTime.start,
+      end: meetingTime.end,
+    };
+
+    console.log("Booking payload:", payload);
+
+    // !!!!!!!!!!! тут буде API виклик!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  }, [isFormValid, name, email, guests, notes, meetingTime]);
 
   return (
-    <div>
-      <Progress step={3} />
+    <div className="p-6 md:p-10 max-w-[640px]">
+      <h3 className="text-xl font-semibold mb-6">Enter details</h3>
 
-      <h2 className="text-xl font-semibold text-white mb-4">Your details</h2>
+      <div className="space-y-5">
+        <div>
+          <label className="block text-sm mb-2">Name *</label>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full bg-transparent border border-[var(--color-white-25)] rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--color-primary-100)] transition"
+          />
+        </div>
 
-      <div className="space-y-4 mb-6">
-        <Input
-          label="Name"
-          value={data.name}
-          onChange={(e) => setData((p) => ({ ...p, name: e.target.value }))}
-        />
-        <Input
-          label="Email"
-          value={data.email}
-          onChange={(e) => setData((p) => ({ ...p, email: e.target.value }))}
-        />
+        <div>
+          <label className="block text-sm mb-2">Email *</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full bg-transparent border border-[var(--color-white-25)] rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--color-primary-100)] transition"
+          />
+        </div>
+
+        <AddGuests value={guests} onChange={setGuests} />
+
+        <div>
+          <label className="block text-sm mb-2">
+            Please share anything that will help prepare our meeting
+          </label>
+          <textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            rows={4}
+            className="w-full bg-transparent border border-[var(--color-white-25)] rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--color-primary-100)] transition resize-none"
+          />
+        </div>
+
+        <button
+          type="button"
+          disabled={!isFormValid}
+          onClick={handleSubmit}
+          className={`
+            mt-4 w-full py-4 rounded-full transition
+            ${
+              isFormValid
+                ? "bg-[var(--color-primary-100)] text-black"
+                : "bg-gray-600 text-gray-400 cursor-not-allowed"
+            }
+          `}
+        >
+          Schedule Event
+        </button>
       </div>
 
-      {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
-
-      <div className="flex gap-3">
-        <Button variant="secondary" onClick={onBack}>
-          Back
-        </Button>
-        <Button onClick={submit}>Confirm</Button>
+      <div className="mt-6 text-sm text-[var(--color-primary-100)]">
+        Cookie settings
       </div>
     </div>
   );
-}
+};
